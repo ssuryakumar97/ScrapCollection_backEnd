@@ -22,7 +22,17 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    token: String
+    status: {
+        type: String,
+        default: "notAssigned"
+    },
+    assignmentDetails:{
+        type:  mongoose.SchemaTypes.ObjectId,
+        ref: "Orders",
+        default: null
+    },
+    token: String,
+
 }, {timestamps: true})
 
 export default mongoose.model("User", userSchema)

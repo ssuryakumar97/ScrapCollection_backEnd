@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
     socket.on("new order", (data) => {
         try {
             console.log(data);
-            socket.emit("order received", "data");
+            io.emit("order received", data);
         } catch (error) {
             console.log(error);
         }

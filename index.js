@@ -19,8 +19,9 @@ const server = app.listen(process.env.PORT || 5000, ()=>{
 })
 export const io = new Server(server, {
     cors: {
+        origin: "*"
         // origin: "http://localhost:5173"
-        origin: "https://household-scrapcollection.netlify.app/"
+        // origin: "https://household-scrapcollection.netlify.app/"
     }
 })
 
@@ -32,6 +33,15 @@ io.on("connection", (socket) => {
         try {
             console.log(data);
             io.emit("order received", data);
+        } catch (error) {
+            console.log(error);
+        }
+        
+    })
+    socket.on("order assigned", (data) => {
+        try {
+            console.log(data);
+            io.emit("order assigned", data);
         } catch (error) {
             console.log(error);
         }

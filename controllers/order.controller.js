@@ -6,8 +6,19 @@ export const registerOrder = async(req, res) => {
     try {
         const order = new Order({email, name, contactNumber, address })
         await order.save()
-        res.status(200).json({message: "Your order registered successfully"})
+        res.status(200).json({message: "Your order registered successfully", data: order})
        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Something went wrong, internal server error"})
+    }
+}
+
+export const getOrderById = async(req,res) => {
+    try {
+        const id = req.params.id
+        const orders = await Order.findOne({_id: id})
+        res.status(200).json(orders)
     } catch (error) {
         console.log(error);
         res.status(500).json({message: "Something went wrong, internal server error"})
@@ -34,12 +45,22 @@ export const getAllCollectionAgent = async(req,res) => {
     }
 }
 
+export const getNotAssignedAgent = async(req,res) => {
+    try {
+        const collectionAgent = await User.find({isCollectionAgent: true, status: "notAssigned"})
+        res.status(200).json(collectionAgent)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Something went wrong, internal server error"})
+    }
+}
+
 export const collectionAgentAssignment = async(req, res) => {
-    const {clientEmail, collectionAgentEmail} = req.body
+    const {clientId, collectionAgentEmail} = req.body
     try {
         const collectionAgent = await User.findOne({email:collectionAgentEmail, status: "notAssigned"})
         console.log(collectionAgent);
-        const userOrder = await Order.findOne({email:clientEmail, collectionStatus: "pending", collectionAgentStatus: "notAssigned"})
+        const userOrder = await Order.findOne({_id:clientId, collectionStatus: "pending", collectionAgentStatus: "notAssigned"})
         console.log(userOrder);
         if(collectionAgent == null || userOrder == null){
             return res.status(401).json({message: "Collection agent already assigned"})

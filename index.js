@@ -40,6 +40,7 @@ io.on("connection", (socket) => {
     socket.on("order assigned", (data) => {
         try {
             io.emit("order assigned", data);
+            console.log("order assigned")
         } catch (error) {
             console.log(error);
         }

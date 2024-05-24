@@ -65,9 +65,9 @@ export const collectionAgentAssignment = async(req, res) => {
         if(collectionAgent == null || userOrder == null){
             return res.status(401).json({message: "Collection agent already assigned"})
         }
-        const updatedUserOrder = await Order.findOneAndUpdate({_id:userOrder._id},{collectionAgentStatus:"assigned", collectionAgentDetails: collectionAgent}, {new: true}).populate("collectionAgentDetails")
+        const updatedUserOrder = await Order.findOneAndUpdate({_id:userOrder._id},{collectionAgentStatus:"assigned", collectionAgentDetails: collectionAgent._id}, {new: true}).populate("collectionAgentDetails")
         // console.log(updatedUserOrder);
-        const updatedCollectionAgent = await User.findOneAndUpdate({_id:collectionAgent._id},{status:"assigned", assignmentDetails: userOrder}, {new: true}).populate("assignmentDetails")
+        const updatedCollectionAgent = await User.findOneAndUpdate({_id:collectionAgent._id},{status:"assigned", assignmentDetails: userOrder._id}, {new: true}).populate("assignmentDetails")
         // console.log(updatedCollectionAgent);
         res.status(201).json({message: "Updated successfully", orderData: updatedUserOrder, agentData: updatedCollectionAgent})
         

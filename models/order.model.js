@@ -30,6 +30,11 @@ const orderSchema = new mongoose.Schema({
         ref: "User",
         default: null
     } ,
+    materialSoldDetails : {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "SoldMaterial",
+        default: null
+    }
 }, {timestamps: true})
 
 export default mongoose.model("Orders", orderSchema)

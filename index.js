@@ -31,7 +31,9 @@ io.on("connection", (socket) => {
     socket.emit("order registration", "hellow");
     socket.on("new order", (data) => {
         try {
+            
             io.emit("order received", data);
+            console.log("new order")
         } catch (error) {
             console.log(error);
         }
@@ -39,7 +41,7 @@ io.on("connection", (socket) => {
     })
     socket.on("order assigned", (data) => {
         try {
-            io.emit("order assigned", data);
+            io.emit("new order assigned", data);
             console.log("order assigned")
         } catch (error) {
             console.log(error);

@@ -34,6 +34,10 @@ const orderSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: "SoldMaterial",
         default: null
+    },
+    notificationType:{
+        type: String,
+        default: "order"
     }
 }, {timestamps: true})
 

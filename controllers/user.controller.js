@@ -53,9 +53,51 @@ export const getUser = async(req, res) => {
 
 export const getAllUser = async(req, res) => {
     try {
-        const {email} = req.user
         const user = await User.find()
         res.status(200).json(user)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Error in getting All user"})
+    }
+}
+
+export const getOnlyUsers = async(req,res) => {
+    try {
+        const user = await User.find({isAdmin: false, isCollectionAgent: false})
+        res.status(201).json(user)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Error in getting All user"})
+    }
+}
+
+export const updateUser = async(req,res) => {
+    try {
+        const {adminEmail, userEmail, isAgent} = req.body
+        const admin = await User.findOne({email: adminEmail})
+        if(admin.isAdmin){
+            const updatedUser = await User.findOneAndUpdate({email: userEmail},{isCollectionAgent: isAgent},{new: true})
+            return res.status(201).json({message: "Data updated successfully", data: updatedUser})
+        } else {
+            return res.status(201).json({message: "You are not authorised to update user"})
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Error in getting All user"})
+    }
+}
+
+
+export const deleteUser = async(req,res) => {
+    try {
+        const {adminEmail, userEmail} = req.body
+        const admin = await User.findOne({email: adminEmail})
+        if(admin.isAdmin){
+            const deleteUser = await User.deleteOne({email: userEmail})
+            return res.status(201).json({message: "Data deleted successfully", data: deleteUser})
+        } else {
+            return res.status(201).json({message: "You are not authorised to delete user"})
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({message: "Error in getting All user"})

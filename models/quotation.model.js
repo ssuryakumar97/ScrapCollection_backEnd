@@ -27,6 +27,7 @@ const quotationRequestSchema = new mongoose.Schema({
             unitsOfMeasurement: {
               type: String,
               required: true,
+              default: "kg"
             },
             totalPrice: {
                 type: Number,
@@ -36,7 +37,11 @@ const quotationRequestSchema = new mongoose.Schema({
     ],
     status: {
         type: String,
-        default: "creation"
+        default: "request"
+    },
+    notificationType: {
+        type: String,
+        default: "quotation"
     }
 }, {timestamps: true})
 

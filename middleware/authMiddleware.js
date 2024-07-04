@@ -5,15 +5,15 @@ dotenv.config()
 const authMiddleware = async(req, res, next) => {
     try {
         // const token = req.header("Authorization")
-        console.log("Headers",req.headers);
+        // console.log("Headers",req.headers);
         // console.log("Authorization",req.headers);
         const token = req.headers.authorization.split(" ")[1] //Bearer token
-        console.log(token)
+        // console.log(token)
         if(!token){
             return res.status(401).json({message: "Token Missing"})
         }
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        console.log(decoded);
+        // console.log(decoded);
         req.user = decoded
         next()
     } catch (error) {

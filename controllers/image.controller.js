@@ -1,12 +1,13 @@
 import connectDb from "../database/configDB.js";
 import mongoose from "mongoose";
 import mongodb from "mongodb"
+import { BSON, EJSON, ObjectId } from 'bson';
 
-const {ObjectId} = mongodb
+// const {ObjectId} = mongodb
 
 export const uploadImage = (req,res) => {
     const file = req.file
-    console.log(file)
+    // console.log(file)
     res.send({
         message: "Uploaded",
         id: file.id,
@@ -56,19 +57,19 @@ export const deleteImage = async(req,res) => {
         const mongoConfig = await connectDb();
         const Db = mongoConfig.connections[0].db
         // console.log(Db.connections[0].db)
-        console.log("connected to mongodb");
-    
+        console.log("connected to mongodb");    
         const imageBucket = new mongoose.mongo.GridFSBucket(Db, {
           bucketName: "quotation_req_photos",
         });
 
-        // const obj_id = new mongoose.Types.ObjectId(req.params.id);
         const obj_id = new mongoose.mongo.BSON.ObjectId(req.params.id);
-        console.log(obj_id)
+        // console.log(obj_id)
+        
 
+        // const deletedData = await imageBucket.delete(obj_id)
         const deletedData = await imageBucket.delete(obj_id)
 
-        res.status(200).json({message: "deleted data successfully"})
+        return res.status(200).json({message: "Data deleted successfully"})
     } catch (error) {
         console.log(error);
         res.status(500).send({

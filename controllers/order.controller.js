@@ -17,7 +17,7 @@ export const registerOrder = async(req, res) => {
 export const getOrderById = async(req,res) => {
     try {
         const id = req.params.id
-        const orders = await Order.findOne({_id: id})
+        const orders = await Order.findOne({_id: id}).populate("collectionAgentDetails").populate("materialSoldDetails")
         res.status(200).json(orders)
     } catch (error) {
         console.log(error);
@@ -25,12 +25,53 @@ export const getOrderById = async(req,res) => {
     }
 }
 
+export const deleteOrderById = async(req,res) => {
+    try {
+        const {id} = req.params
+        console.log(id)
+        const deletedOrder = await Order.deleteOne({_id:id})
+        console.log(deletedOrder)
+        res.status(201).json(deletedOrder)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Something went wrong, internal server error"})
+    }
+}
+
+export const getOrderByUsername = async(req,res) => {
+    try {
+        const {email} = req.body
+        // console.log(email)
+        const userOrders = await Order.find({email})
+        res.status(201).json(userOrders)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message: "Something went wrong, internal server error"})
+    }
+}
+
 export const getAllOrders = async(req,res) => {
     try {
-        const orders = await Order.find()
+        const orders = await Order.find().populate("collectionAgentDetails")
         res.status(200).json(orders)
     } catch (error) {
         console.log(error);
+        res.status(500).json({message: "Something went wrong, internal server error"})
+    }
+}
+
+export const getAllOrdersByCollectionAgent = async(req,res) => {
+    try {
+        const {email} = req.body
+        // console.log(email)
+        const agentId = await User.findOne({email})
+        // console.log(agentId[0]._id)
+        // console.log(agentId) 
+        const orders= await Order.find({collectionAgentDetails:agentId._id}).populate("collectionAgentDetails")
+        // console.log(orders)
+        res.status(201).json(orders)
+    } catch (error) {
+        console.log(error)
         res.status(500).json({message: "Something went wrong, internal server error"})
     }
 }

@@ -7,7 +7,7 @@ dotenv.config()
 const storage = new GridFsStorage({
     url: process.env.MONGO_URL,
     file: (req, file) => {
-        console.log("storage:",file)
+        // console.log("storage:",file)
         if (
             file.mimetype === "image/jpeg" ||
             file.mimetype === "image/png" ||

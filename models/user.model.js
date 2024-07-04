@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema({
         ref: "Orders",
         default: null
     },
+    contactNumber:{
+        type: String,
+        default: "00-000-000",
+    },
     token: String,
 
 }, {timestamps: true})

@@ -4,7 +4,7 @@ import UserModel from "../models/user.model.js";
 import InventoryModel from "../models/inventory.model.js";
 import MaterialModel from "../models/material.model.js";
 // import OrderModel from "../models/order.model.js";
-
+ 
 export const uploadSoldMaterial = async(req, res) => {
     try {
         const {userEmail, agentEmail, materialSold, orderId} = req.body
@@ -23,17 +23,38 @@ export const uploadSoldMaterial = async(req, res) => {
             var materialFind = await MaterialModel.findOne({title: materialSold[ind].title})
             if(inventoryFind == null){
                 var totalUpdatedPrice = materialFind != null ? materialFind.price * materialSold[ind].quantity : materialSold[ind].totalPrice
-                var inventory = await InventoryModel({title: materialSold[ind].title, totalQuantity: materialSold[ind].quantity, unitsOfMeasurement: materialSold[ind].unitsOfMeasurement, totalPrice: totalUpdatedPrice})
+                var inventory = await InventoryModel({title: materialSold[ind].title, totalQuantity: materialSold[ind].quantity, unitsOfMeasurement: materialSold[ind].unitsOfMeasurement, totalPrice: totalUpdatedPrice, materials : [materialSold[ind]]})
                 await inventory.save()
             } else {
                 var totalUpdatedQuantity = inventoryFind.totalQuantity + materialSold[ind].quantity
                 var totalUpdatedPrice = materialFind != null ? materialFind.price * totalUpdatedQuantity : inventoryFind.totalPrice + materialSold[ind].totalPrice    
-                var updatedInventory = await InventoryModel.findOneAndUpdate({title: materialSold[ind].title},{totalQuantity: totalUpdatedQuantity, totalPrice: totalUpdatedPrice})
+                var updatedInventory = await InventoryModel.findOneAndUpdate({title: materialSold[ind].title},{totalQuantity: totalUpdatedQuantity, totalPrice: totalUpdatedPrice, $push:{materials: materialSold[ind]}})
             }
         }
         const inventoryDetails = await InventoryModel.find()
         // res.status(200).json({message: "Material added successfully", soldData: findSoldMaterial , orderData: updatedOrderDetails, agentData: agentDetails})
-        res.status(200).json({inventoryDetails})
+        res.status(200).json({message:"Material updated in inventory successfully",inventoryDetails})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Something went wrong, internal server error"})
+    }
+}
+
+export const getInventoryMaterials = async(req,res) => {
+    try {
+        const inventory = await InventoryModel.find()
+        res.status(201).json({data: inventory})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Something went wrong, internal server error"})
+    }
+}
+
+export const getInventoryMaterialsById = async(req,res) => {
+    try {
+        const {id} = req.params;
+        const materials = await InventoryModel.findOne({_id: id})
+        res.status(201).json({data: materials})
     } catch (error) {
         console.log(error);
         res.status(500).json({message: "Something went wrong, internal server error"})

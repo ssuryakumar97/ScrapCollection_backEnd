@@ -48,6 +48,14 @@ io.on("connection", (socket) => {
         }
         
     })
+    socket.on("quotation received", (data) => {
+        io.emit("new quotation received", data)
+        console.log(data)
+    })
+    socket.on("quotation updated", (data) => {
+        io.emit("quotation updated data", data)
+        console.log(data)
+    })
     socket.emit("message", "hi")
 })
 

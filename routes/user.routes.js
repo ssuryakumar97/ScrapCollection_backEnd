@@ -2,7 +2,7 @@ import express from "express"
 import { registerUser, loginUser, getUser, getAllUser, getOnlyUsers, deleteUser, updateUser } from "../controllers/user.controller.js"
 import authMiddleware from "../middleware/authMiddleware.js"
 import { collectionAgentAssignment, deleteOrderById, getAllCollectionAgent, getAllOrders, getAllOrdersByCollectionAgent, getNotAssignedAgent, getOrderById, getOrderByUsername, registerOrder } from "../controllers/order.controller.js"
-import { getAllMaterials, getMaterialById, uploadMaterial } from "../controllers/material.controller.js"
+import { deleteMaterialById, getAllMaterials, getMaterialById, updateMaterialById, uploadMaterial } from "../controllers/material.controller.js"
 import { getInventoryMaterials, getInventoryMaterialsById, uploadSoldMaterial } from "../controllers/soldMaterial.controller.js"
 import { uploadImage, downloadImage, deleteImage } from "../controllers/image.controller.js"
 import { upload } from "../services/image.upload.js"
@@ -32,7 +32,9 @@ router.post("/order/agentAssignment", authMiddleware, collectionAgentAssignment)
 //material routes
 router.post("/material/uploadMaterial",authMiddleware, uploadMaterial)
 router.get("/material/getMaterialById/:id",authMiddleware, getMaterialById)
+router.put("/material/updateMaterialById/:id",authMiddleware, updateMaterialById)
 router.get("/material/getAllMaterials",authMiddleware, getAllMaterials)
+router.delete("/material/deleteMaterialById/:id",authMiddleware, deleteMaterialById)
 
 //upload sold material
 router.post("/soldMaterial/uploadSoldMaterial",authMiddleware, uploadSoldMaterial)

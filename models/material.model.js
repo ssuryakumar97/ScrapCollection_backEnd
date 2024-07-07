@@ -14,6 +14,10 @@ const materialSchema = new mongoose.Schema(
     image: {
         type: String,
         default: "none"
+    }, 
+    imageId: {
+      type: String,
+      default: "none"
     },
     price: {
       type: Number,

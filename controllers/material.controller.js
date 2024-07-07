@@ -28,10 +28,31 @@ export const getMaterialById = async(req,res) => {
     }
 }
 
+export const updateMaterialById = async(req,res) => {
+    try {
+        const id = req.params.id
+        const material = await MaterialModel.findOneAndUpdate({_id:id},{$set: req.body},{new: true})
+        res.status(200).json({message: "Material updated successfully", data: {material}})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Error in getting material"})
+    }
+}
+
 export const getAllMaterials = async(req, res) => {
     try {
         const allMaterials = await MaterialModel.find()
         res.status(200).json(allMaterials)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Error in getting all materials"})
+    }
+}
+
+export const deleteMaterialById = async(req, res) => {
+    try {
+        const deleteMat = await MaterialModel.deleteOne({_id: req.params.id})
+        res.status(200).json({message: "Material deleted successfully", data: deleteMat})
     } catch (error) {
         console.log(error);
         res.status(500).json({message: "Error in getting all materials"})

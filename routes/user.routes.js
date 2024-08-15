@@ -33,7 +33,7 @@ router.post("/order/agentAssignment", authMiddleware, collectionAgentAssignment)
 router.post("/material/uploadMaterial",authMiddleware, uploadMaterial)
 router.get("/material/getMaterialById/:id",authMiddleware, getMaterialById)
 router.put("/material/updateMaterialById/:id",authMiddleware, updateMaterialById)
-router.get("/material/getAllMaterials",authMiddleware, getAllMaterials)
+router.get("/material/getAllMaterials", getAllMaterials)
 router.delete("/material/deleteMaterialById/:id",authMiddleware, deleteMaterialById)
 
 //upload sold material
